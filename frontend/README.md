@@ -20,7 +20,7 @@ The `pages/api` directory is mapped to `/api/*`. Files in this directory are tre
 
 ## For running Docker Compose file
 
-Write the simple command
+Write the simple command.
 
 ```bash
  docker-compose up --build --force-recreate
