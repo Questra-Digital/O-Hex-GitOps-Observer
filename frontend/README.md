@@ -18,9 +18,9 @@ You can start editing the page by modifying `pages/index.tsx`. The page auto-upd
 
 The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) 
 
-## For running Docker compose file
+## For running Docker Compose file
 
-write the simple command
+Write the simple command
 
 ```bash
  docker-compose up --build --force-recreate
