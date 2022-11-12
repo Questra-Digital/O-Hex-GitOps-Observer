@@ -4,5 +4,7 @@ services:
   app:
     image: docker-nextjs-dev
     build: .
+    volumes:
+      - ./frontapp:/opt/frontapp
     ports:
       - 3000:3000
