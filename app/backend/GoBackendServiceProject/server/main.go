@@ -8,7 +8,15 @@ import (
 	pb "moviesapp.com/grpc/protos"
 	"net"
 	"strconv"
+	"go.mongodb.org/mongo-driver/mongo"
+    "go.mongodb.org/mongo-driver/mongo/options"
+    "go.mongodb.org/mongo-driver/mongo/readpref"
+	"go.mongodb.org/mongo-driver/bson"
+
+
 )
+
+
 
 const (
 	port = ":50051"
@@ -21,7 +29,23 @@ type movieServer struct {
 }
 
 func main() {
-	initMovies()
+
+    // MONGODB CONNECTION 
+	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb://localhost:27017"))
+	if err != nil {
+			panic(err)
+	}
+	if err := client.Ping(context.TODO(), readpref.Primary()); err != nil {
+        panic(err)
+    }
+	usersCollection := client.Database("testing").Collection("users")
+	user := bson.D{{"fullName", "User 2"}, {"age", 50}}
+    // insert the bson object using InsertOne()
+    usersCollection.InsertOne(context.TODO(), user)
+    // check for errors in the insertion
+ 
+	
+    initMovies()
 	lis, err := net.Listen("tcp", port)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
