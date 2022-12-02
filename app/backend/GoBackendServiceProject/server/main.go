@@ -2,20 +2,17 @@ package main
 
 import (
 
-	"context"
-	"google.golang.org/grpc"
-	"log"
-	"math/rand"
-	pb "moviesapp.com/grpc/protos"
-	"net"
-	"strconv"
-	"go.mongodb.org/mongo-driver/mongo"
+    "context"
+    "google.golang.org/grpc"
+    "log"
+    "math/rand"
+    pb "moviesapp.com/grpc/protos"
+    "net"
+    "strconv"
+    "go.mongodb.org/mongo-driver/mongo"
     "go.mongodb.org/mongo-driver/mongo/options"
     "go.mongodb.org/mongo-driver/mongo/readpref"
-	"github.com/joho/godotenv"
-
-
-
+    "github.com/joho/godotenv"
 )
 
 
