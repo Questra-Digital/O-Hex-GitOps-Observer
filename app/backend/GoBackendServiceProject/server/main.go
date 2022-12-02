@@ -1,6 +1,7 @@
 package main
 
 import (
+
 	"context"
 	"google.golang.org/grpc"
 	"log"
@@ -11,7 +12,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
     "go.mongodb.org/mongo-driver/mongo/options"
     "go.mongodb.org/mongo-driver/mongo/readpref"
-	"go.mongodb.org/mongo-driver/bson"
+	"github.com/joho/godotenv"
+
 
 
 )
@@ -29,20 +31,21 @@ type movieServer struct {
 }
 
 func main() {
-
+ 
     // MONGODB CONNECTION 
-	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb://localhost:27017"))
+    envMap, mapErr := godotenv.Read(".env")
+	if mapErr != nil {
+		log.Fatalf("Error occurred ")
+	}
+	
+	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(envMap["MONGO_URI"]))
 	if err != nil {
 			panic(err)
 	}
 	if err := client.Ping(context.TODO(), readpref.Primary()); err != nil {
         panic(err)
     }
-	usersCollection := client.Database("testing").Collection("users")
-	user := bson.D{{"fullName", "User 2"}, {"age", 50}}
-    // insert the bson object using InsertOne()
-    usersCollection.InsertOne(context.TODO(), user)
-    // check for errors in the insertion
+	
  
 	
     initMovies()
