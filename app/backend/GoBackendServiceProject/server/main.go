@@ -1,14 +1,21 @@
 package main
 
 import (
-	"context"
-	"google.golang.org/grpc"
-	"log"
-	"math/rand"
-	pb "moviesapp.com/grpc/protos"
-	"net"
-	"strconv"
+
+    "context"
+    "google.golang.org/grpc"
+    "log"
+    "math/rand"
+    pb "moviesapp.com/grpc/protos"
+    "net"
+    "strconv"
+    "go.mongodb.org/mongo-driver/mongo"
+    "go.mongodb.org/mongo-driver/mongo/options"
+    "go.mongodb.org/mongo-driver/mongo/readpref"
+    "github.com/joho/godotenv"
 )
+
+
 
 const (
 	port = ":50051"
@@ -21,7 +28,24 @@ type movieServer struct {
 }
 
 func main() {
-	initMovies()
+ 
+    // MONGODB CONNECTION 
+    envMap, mapErr := godotenv.Read(".env")
+	if mapErr != nil {
+		log.Fatalf("Error occurred ")
+	}
+	
+	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(envMap["MONGO_URI"]))
+	if err != nil {
+			panic(err)
+	}
+	if err := client.Ping(context.TODO(), readpref.Primary()); err != nil {
+        panic(err)
+    }
+	
+ 
+	
+    initMovies()
 	lis, err := net.Listen("tcp", port)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
