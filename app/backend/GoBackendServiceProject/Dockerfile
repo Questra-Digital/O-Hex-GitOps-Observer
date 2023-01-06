@@ -13,8 +13,8 @@ RUN go mod tidy
 RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28
 RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2
 
-COPY server /app/
-COPY protos /app/
+COPY . /app/
+## COPY protos /app/
 
 
 CMD ["go","run","server/main.go"]
