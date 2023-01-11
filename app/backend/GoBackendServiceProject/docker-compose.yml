@@ -1,0 +1,30 @@
+version: '3.3'
+services:
+  gol:
+    container_name: 'go-container'
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '50051:50051'    
+    environment: 
+      - MONGO_URI=mongodb://mongo:27017
+      - REDIS_URI=redis:6379
+    depends_on:
+      - 'mongo'
+      - 'redis'
+
+  mongo:
+    image: 'mongo:latest'
+    container_name: 'mongo'
+    # ports:
+    #   - '27017:27017'
+
+  redis:
+    image: 'redis:alpine'
+    container_name: 'redis'
+    command: redis-server /usr/local/etc/redis/redis.conf
+    volumes:
+      - $PWD/redis.conf:/usr/local/etc/redis/redis.conf
+    # ports:
+    #   - '6379:6379'
