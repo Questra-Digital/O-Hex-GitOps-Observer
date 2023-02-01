@@ -1,10 +1,6 @@
-import Link from "next/link";
-import { useState } from "react";
 import AddWorkspace from "../modal/AddWorkspace";
 
 const Sidebar = ({ workspaces }: any) => {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  console.log(workspaces);
   return (
     <aside
       className="w-64 bg-gray-800  sm:min-h-screen p-3"
@@ -75,13 +71,6 @@ const Sidebar = ({ workspaces }: any) => {
               })}
 
               <li>
-                {/* <a
-                  href="#"
-                  className="flex items-center w-full p-2 text-base text-red-700 font-bold transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-red dark:hover:bg-gray-700"
-                >
-                 Add workspace
-                </a> */}
-
                 <AddWorkspace />
               </li>
             </ul>

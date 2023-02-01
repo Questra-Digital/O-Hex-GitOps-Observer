@@ -1,12 +1,12 @@
+import React, { useState, useEffect } from "react";
+import { gql } from "@apollo/client";
+
 import Header from "../../components/header/Header";
 import Sidebar from "../../components/sidebar/Sidebar";
 import ProjectList from "../../components/projectlist/ProjectList";
 import client from "../../apollo-client";
-import { gql } from "@apollo/client";
 
-
-
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const { data } = await client.query({
     query: gql`
       query getWorkspacesByUsername($username: String!) {
@@ -28,7 +28,11 @@ export async function getStaticProps() {
 }
 
 const Workspace = ({ workspaces }: any) => {
-  
+  const [workspaceData, setWorkspaceData] = useState(workspaces);
+
+  useEffect(() => {
+    setWorkspaceData(workspaces);
+  }, [workspaces]);
 
   return (
     <div>
@@ -36,7 +40,7 @@ const Workspace = ({ workspaces }: any) => {
 
       <div className="flex flex-row">
         <div className="basis-1/5">
-          <Sidebar workspaces={workspaces}/>
+          <Sidebar workspaces={workspaces} />
         </div>
         <div className="basis-4/5">
           <ProjectList />
