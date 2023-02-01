@@ -88,4 +88,22 @@ const MovieList = [
   },
 ];
 
-module.exports = { UserList, MovieList };
+const WorkspaceList = [
+  {
+    _id: "232901491",
+    name: "workspace 1",
+    username: "ali2022",
+  },
+  {
+    _id: "2398402808",
+    name: "workspace 2",
+    username: "ali2022",
+  },
+  {
+    _id: "989797897491",
+    name: "workspace 3",
+    username: "ali2022",
+  },
+];
+
+module.exports = { UserList, MovieList, WorkspaceList };

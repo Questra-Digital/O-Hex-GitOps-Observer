@@ -1,7 +1,7 @@
 import Header from "../../components/header/Header";
 import Sidebar from "../../components/sidebar/Sidebar";
 import ProjectList from "../../components/projectlist/ProjectList";
-import client from "../../Apollo-client";
+import client from "../../apollo-client";
 import { gql } from "@apollo/client";
 
 

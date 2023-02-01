@@ -68,7 +68,7 @@ input CreateJobListingInput {
 input CreateWorkspaceInput {
   name: String!
   username: String!
- 
+
 }
 
 input CreateProjectInput {

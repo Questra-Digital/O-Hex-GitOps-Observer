@@ -18,11 +18,21 @@ const typeDefs = gql`
     isInTheaters: Boolean!
   }
 
+  type Workspace {
+    _id: ID!
+    name: String!
+    username: String!
+  }
+
   type Query {
     users: [User!]!
     user(id: ID!): User!
     movies: [Movie!]!
     movie(name: String!): Movie!
+
+    getallworkspaces: [Workspace!]!
+    getworkspace(id : ID!) : Workspace!
+    getworkspacesbyusername(username : String!): [Workspace!]!
   }
 
   input CreateUserInput {
@@ -37,10 +47,27 @@ const typeDefs = gql`
     newUsername: String!
   }
 
+  input CreateWorkspaceInput {
+    name: String!
+    username: String!
+  }
+
+  input UpdateWorkspaceInput {
+    name: String
+  }
+
+  type DeleteWorkspaceResponse {
+    deletedWorkspaceId: String!
+  }
+
   type Mutation {
     createUser(input: CreateUserInput!): User
     updateUsername(input: UpdateUsernameInput!): User
     deleteUser(id: ID!): User
+
+    createWorkspace(input: CreateWorkspaceInput!): Workspace!
+    updateWorkspace(id: ID!, input: UpdateWorkspaceInput!): Workspace!
+    deleteWorkspace(id: ID!): DeleteWorkspaceResponse!
   }
 
   enum Nationality {
