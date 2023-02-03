@@ -10,12 +10,12 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 )
 
-const defaultPort = "4000"
+const defaultPort = "4001"
 
 func main() {
 
 	c := cors.New(cors.Options{
-        AllowedOrigins: []string{"http://localhost:4000"},
+        AllowedOrigins: []string{"http://localhost:4001"},
         AllowCredentials: true,
     })
 	port := os.Getenv("PORT")
