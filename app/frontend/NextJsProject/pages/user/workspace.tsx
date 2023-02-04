@@ -1,38 +1,43 @@
 import React, { useState, useEffect } from "react";
-import { gql } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
+import { useSelector, useDispatch } from "react-redux";
 
+import type { RootState } from "../../store";
+import { getWorkspaces } from "../../store/workspace/workspaceSlice";
 import Header from "../../components/header/Header";
 import Sidebar from "../../components/sidebar/Sidebar";
 import ProjectList from "../../components/projectlist/ProjectList";
 import client from "../../apollo-client";
 
-export async function getServerSideProps() {
-  const { data } = await client.query({
-    query: gql`
-      query getWorkspacesByUsername($username: String!) {
-        getworkspacesbyusername(username: $username) {
-          name
-        }
-      }
-    `,
-    variables: {
-      username: "ali2022",
-    },
+const GET_WORKSPACES_QUERY = gql`
+  query getWorkspacesByUsername($username: String!) {
+    getworkspacesbyusername(username: $username) {
+      name
+    }
+  }
+`;
+
+const Workspace = () => {
+  const dispatch = useDispatch();
+
+  // Fetching workspaces data from database
+  const { loading, error, data } = useQuery(GET_WORKSPACES_QUERY, {
+    client,
+    variables: { username: "ali2022" },
   });
 
-  return {
-    props: {
-      workspaces: data.getworkspacesbyusername,
-    },
-  };
-}
-
-const Workspace = ({ workspaces }: any) => {
-  const [workspaceData, setWorkspaceData] = useState(workspaces);
-
   useEffect(() => {
-    setWorkspaceData(workspaces);
-  }, [workspaces]);
+    // storing data in redux
+    if (!loading && !error) {
+      console.log(data.getworkspacesbyusername);
+      dispatch(getWorkspaces(data.getworkspacesbyusername));
+    }
+  }, [dispatch, loading, error, data]);
+
+  // Getting workspaces data from redux
+  const workspaces = useSelector(
+    (state: RootState) => state.workspaces.workspaces
+  );
 
   return (
     <div>
