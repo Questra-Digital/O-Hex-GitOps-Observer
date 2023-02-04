@@ -62,7 +62,7 @@ const Sidebar = ({ workspaces }: any) => {
                   <li key={idx}>
                     <a
                       href="#"
-                      className="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                      className="flex items-center w-full p-2 text-base  text-gray-500 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                     >
                       {workspace.name}
                     </a>
