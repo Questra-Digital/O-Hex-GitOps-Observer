@@ -2,16 +2,6 @@
 #
 # https://gqlgen.com/getting-started/
 
-
-
-type JobListing {
-  _id: ID!
-  title: String!
-  description: String!
-  company: String!
-  url: String!
-}
-
 type Workspace {
   _id: String!
   name: String!
@@ -31,40 +21,27 @@ type Project {
   collaborators: [String]
 }
 
-type Query {
-  jobs: [JobListing!]!
-  job(id: ID!): JobListing!
-  
+type Query {  
   getallworkspaces: [Workspace!]!
-  getworkspace(id : ID!) : Workspace!
+  getworkspace(id : String!) : Workspace!
   getworkspacesbyusername(username : String!): [Workspace!]!
   
   getallprojects : [Project!]!
-  getproject(id: ID!) : Project!
-  getprojectsbyworkspace(workspaceid: ID!): [Project!]!
+  getproject(id: String!) : Project!
+  getprojectsbyworkspace(workspaceid: String!): [Project!]!
 }
 
 type Mutation {
-  createJobListing(input: CreateJobListingInput!): JobListing!
-  updateJobListing(id: ID!, input: UpdateJobListingInput!): JobListing!
-  deleteJobListing(id: ID!): DeleteJobResponse!
-
   createWorkspace(input: CreateWorkspaceInput!): Workspace!
-  updateWorkspace(id: ID!, input: UpdateWorkspaceInput!): Workspace!
-  deleteWorkspace(id: ID!): DeleteWorkspaceResponse!
+  updateWorkspace(id: String!, input: UpdateWorkspaceInput!): Workspace!
+  deleteWorkspace(id: String!): DeleteWorkspaceResponse!
 
   createProject(input: CreateProjectInput!): Project!
-  updateProject(id: ID!, input: UpdateProjectInput!): Project!
-  deleteProject(id: ID!): DeleteProjectResponse!
+  updateProject(id: String!, input: UpdateProjectInput!): Project!
+  deleteProject(id: String!): DeleteProjectResponse!
  
 }
 
-input CreateJobListingInput {
-  title: String!
-  description: String!
-  company: String!
-  url: String!
-}
 
 input CreateWorkspaceInput {
   name: String!
@@ -83,11 +60,7 @@ input CreateProjectInput {
   collaborators: [String]
 }
 
-input UpdateJobListingInput {
-  title: String
-  description: String
-  url: String
-}
+
 
 input UpdateWorkspaceInput {
   name: String
@@ -101,10 +74,6 @@ input UpdateProjectInput {
   token: String 
   collaborators: [String]
 
-}
-
-type DeleteJobResponse {
-  deletedJobId: String!
 }
 
 type DeleteWorkspaceResponse {

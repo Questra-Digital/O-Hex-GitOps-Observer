@@ -2,13 +2,6 @@
 
 package model
 
-type CreateJobListingInput struct {
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Company     string `json:"company"`
-	URL         string `json:"url"`
-}
-
 type CreateProjectInput struct {
 	Name          string    `json:"name"`
 	Description   string    `json:"description"`
@@ -25,10 +18,6 @@ type CreateWorkspaceInput struct {
 	Username string `json:"username"`
 }
 
-type DeleteJobResponse struct {
-	DeletedJobID string `json:"deletedJobId"`
-}
-
 type DeleteProjectResponse struct {
 	DeletedProjectID string `json:"deletedProjectId"`
 }
@@ -37,16 +26,8 @@ type DeleteWorkspaceResponse struct {
 	DeletedWorkspaceID string `json:"deletedWorkspaceId"`
 }
 
-type JobListing struct {
-	ID          string `json:"_id"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Company     string `json:"company"`
-	URL         string `json:"url"`
-}
-
 type Project struct {
-	ID            string    `json:"_id"`
+	ID            string    `json:"_id" bson:"_id"`
 	Name          string    `json:"name"`
 	Owner         string    `json:"owner"`
 	Createdat     string    `json:"createdat"`
@@ -55,12 +36,6 @@ type Project struct {
 	Workspaceid   string    `json:"workspaceid"`
 	Token         *string   `json:"token"`
 	Collaborators []*string `json:"collaborators"`
-}
-
-type UpdateJobListingInput struct {
-	Title       *string `json:"title"`
-	Description *string `json:"description"`
-	URL         *string `json:"url"`
 }
 
 type UpdateProjectInput struct {
@@ -77,7 +52,7 @@ type UpdateWorkspaceInput struct {
 }
 
 type Workspace struct {
-	ID       string `json:"_id"`
+	ID       string `json:"_id" bson:"_id"`
 	Name     string `json:"name"`
 	Username string `json:"username"`
 }
