@@ -12,6 +12,9 @@ type CreateJobListingInput struct {
 type CreateProjectInput struct {
 	Name          string    `json:"name"`
 	Description   string    `json:"description"`
+	Owner         string    `json:"owner"`
+	Status        *string   `json:"status"`
+	Createdat     string    `json:"createdat"`
 	Workspaceid   string    `json:"workspaceid"`
 	Token         *string   `json:"token"`
 	Collaborators []*string `json:"collaborators"`
@@ -45,6 +48,9 @@ type JobListing struct {
 type Project struct {
 	ID            string    `json:"_id"`
 	Name          string    `json:"name"`
+	Owner         string    `json:"owner"`
+	Createdat     string    `json:"createdat"`
+	Status        *string   `json:"status"`
 	Description   string    `json:"description"`
 	Workspaceid   string    `json:"workspaceid"`
 	Token         *string   `json:"token"`
@@ -60,6 +66,7 @@ type UpdateJobListingInput struct {
 type UpdateProjectInput struct {
 	Name          *string   `json:"name"`
 	Description   *string   `json:"description"`
+	Status        *string   `json:"status"`
 	Workspaceid   *string   `json:"workspaceid"`
 	Token         *string   `json:"token"`
 	Collaborators []*string `json:"collaborators"`

@@ -1,17 +1,17 @@
 import ListRow from "./ListRow";
 import { ListData } from "./ListData";
 
-const ListBody = () => {
+const ListBody = ({ projects }: any) => {
   return (
     <tbody>
-      {ListData.map((item, idx) => {
+      {projects.map((project: any, idx: any) => {
         return (
           <ListRow
             key={idx}
-            name={item.name}
-            owner={item.owner}
-            created_at={item.created_at}
-            status={item.status}
+            name={project.name}
+            owner={project.owner}
+            createdat={project.createdat}
+            status={project.status}
           />
         );
       })}

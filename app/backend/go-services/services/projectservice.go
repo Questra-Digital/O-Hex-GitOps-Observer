@@ -46,16 +46,14 @@ func (db *DB) GetProjectsByWorkspace(workspaceid string) []*model.Project {
 	    if err != nil {
 	        return nil
 	    }
-	    projects = append(projects, &project)
+        projects = append(projects, &project)
 	}
 	if err := cur.Err(); err != nil {
 	    return nil
 	}
 	cur.Close(context.TODO())
-	
 	return projects
 }
-
 
 // get all projects 
 func (db *DB) GetAllProjects() []*model.Project {
@@ -80,14 +78,14 @@ func (db *DB) CreateProject(projectInfo model.CreateProjectInput) *model.Project
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 	workspaceId , _ := primitive.ObjectIDFromHex(projectInfo.Workspaceid)
-	insert, err := projectCollec.InsertOne(ctx, bson.M{"name": projectInfo.Name, "description": projectInfo.Description, "workspaceid": workspaceId, "token": projectInfo.Token, "collaborators": projectInfo.Collaborators })
+	insert, err := projectCollec.InsertOne(ctx, bson.M{"name": projectInfo.Name, "description": projectInfo.Description, "workspaceid": workspaceId, "token": projectInfo.Token, "collaborators": projectInfo.Collaborators, "status": projectInfo.Status, "createdat": projectInfo.Createdat, "owner": projectInfo.Owner })
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	insertedID := insert.InsertedID.(primitive.ObjectID).Hex()
-	returnProject := model.Project{ID: insertedID, Name: projectInfo.Name, Description: projectInfo.Description, Workspaceid: projectInfo.Workspaceid, Token: projectInfo.Token, Collaborators: projectInfo.Collaborators }
+	returnProject := model.Project{ID: insertedID, Name: projectInfo.Name, Description: projectInfo.Description, Workspaceid: projectInfo.Workspaceid, Token: projectInfo.Token, Collaborators: projectInfo.Collaborators, Status: projectInfo.Status, Createdat: projectInfo.Createdat, Owner: projectInfo.Owner}
 	return &returnProject
 }
 

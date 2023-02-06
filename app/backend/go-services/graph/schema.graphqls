@@ -13,17 +13,20 @@ type JobListing {
 }
 
 type Workspace {
-  _id: ID!
+  _id: String!
   name: String!
   username: String!
  
 }
 
 type Project {
-  _id : ID!
+  _id : String!
   name: String!
+  owner: String!
+  createdat: String!
+  status: String
   description: String!
-  workspaceid: ID!
+  workspaceid: String!
   token : String
   collaborators: [String]
 }
@@ -53,9 +56,7 @@ type Mutation {
   createProject(input: CreateProjectInput!): Project!
   updateProject(id: ID!, input: UpdateProjectInput!): Project!
   deleteProject(id: ID!): DeleteProjectResponse!
-  
-
-  
+ 
 }
 
 input CreateJobListingInput {
@@ -74,7 +75,10 @@ input CreateWorkspaceInput {
 input CreateProjectInput {
   name: String!
   description: String!
-  workspaceid: ID!
+  owner: String!
+  status: String
+  createdat: String!
+  workspaceid: String!
   token : String
   collaborators: [String]
 }
@@ -92,7 +96,8 @@ input UpdateWorkspaceInput {
 input UpdateProjectInput {
   name: String 
   description: String
-  workspaceid: ID 
+  status: String
+  workspaceid: String
   token: String 
   collaborators: [String]
 
