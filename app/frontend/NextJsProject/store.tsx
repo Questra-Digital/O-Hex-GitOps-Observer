@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import workspacesReducer from "./store/workspace/workspaceSlice";
 import projectsReducer from "./store/project/projectSlice";
+import currentWorkspaceIdReducer from "./store/workspace/currentWorkspaceSlice";
 
 export const store = configureStore({
   reducer: {
     workspaces: workspacesReducer,
     projects: projectsReducer,
+    currentWorkspaceId: currentWorkspaceIdReducer
   },
 });
 

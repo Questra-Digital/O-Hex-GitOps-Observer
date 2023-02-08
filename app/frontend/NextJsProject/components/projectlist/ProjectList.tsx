@@ -23,11 +23,13 @@ const GET_PROJECTS_QUERY = gql`
 
 const ProjectList = () => {
   const dispatch = useDispatch();
-
+  const currentWorkspaceId = useSelector(
+    (state: RootState) => state.currentWorkspaceId.currentWorkspaceId
+  );
   // Fetching workspaces data from database
   const { loading, error, data } = useQuery(GET_PROJECTS_QUERY, {
     client,
-    variables: { workspaceid: "63c588bbed42978f7c08be33" },
+    variables: { workspaceid: currentWorkspaceId },
   });
   console.log("data : ", data);
 
@@ -75,34 +77,45 @@ const ProjectList = () => {
               {/* <button className="bg-indigo-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">
                 Add a Project
               </button> */}
-              <AddProject/>
+              <AddProject />
             </div>
           </div>
         </div>
+        {/* add project here */}
+
         <div>
           <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
-            <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
-              <table className="min-w-full leading-normal">
-                <ListHead />
-                <ListBody projects={projects} />
-              </table>
-              <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between          ">
-                <span className="text-xs xs:text-sm text-gray-900">
-                  Showing 1 to 4 of 50 Entries
-                </span>
-                <div className="inline-flex mt-2 xs:mt-0">
-                  <button className="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-l">
-                    Prev
-                  </button>
-                  &nbsp; &nbsp;
-                  <button className="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-r">
-                    Next
-                  </button>
+            {projects.length > 0 ? (
+              <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
+                <table className="min-w-full leading-normal">
+                  <ListHead />
+                  <ListBody projects={projects} />
+                </table>
+                <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between">
+                  <span className="text-xs xs:text-sm text-gray-900">
+                    Showing 1 to 4 of 50 Entries
+                  </span>
+                  <div className="inline-flex mt-2 xs:mt-0">
+                    <button className="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-l">
+                      Prev
+                    </button>
+                    &nbsp; &nbsp;
+                    <button className="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-r">
+                      Next
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
+            ) : (
+              <div className="text-center p-10 border border-gray-300 rounded bg-gray-100">
+                <h2 className="text-2xl text-gray-900">No projects found</h2>
+                <p className="text-gray-600">Please add one.</p>
+              </div>
+            )}
           </div>
         </div>
+
+        {/* add project here */}
       </div>
     </div>
   );

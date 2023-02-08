@@ -2,6 +2,8 @@ import React from "react";
 import { gql } from "@apollo/client";
 import client from "../../apollo-client";
 import Router from "next/router";
+import { useSelector, useDispatch } from "react-redux";
+import type { RootState } from "../../store";
 
 export default function AddProject() {
   // to open and close the add workspace model
@@ -18,6 +20,10 @@ export default function AddProject() {
     var year = date.getFullYear();
     return day + '/' + month + '/' + year;
   }
+
+  const dispatch = useDispatch();
+  const currentWorkspaceId = useSelector((state: RootState) => state.currentWorkspaceId.currentWorkspaceId);
+  
 
   const handleAdd = async () => {
 
@@ -44,7 +50,7 @@ export default function AddProject() {
           name: projectName,
           description: projectDesc,
           owner: "ali2022",
-          workspaceid: "63c588bbed42978f7c08be33",
+          workspaceid: currentWorkspaceId,
           createdat: getDate(),
           status: "active"
         },
@@ -52,7 +58,6 @@ export default function AddProject() {
     });
 
     // once added, empty the input box
-    Router.reload();
     setProjectName("");
     setProjectDesc("");
   };

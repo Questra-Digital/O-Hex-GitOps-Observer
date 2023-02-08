@@ -3,42 +3,41 @@
 # https://gqlgen.com/getting-started/
 
 type Workspace {
-  _id: String!
+  _id: ID!
   name: String!
   username: String!
- 
 }
 
 type Project {
-  _id : String!
+  _id : ID!
   name: String!
   owner: String!
   createdat: String!
   status: String
   description: String!
-  workspaceid: String!
+  workspaceid: ID!
   token : String
   collaborators: [String]
 }
 
 type Query {  
   getallworkspaces: [Workspace!]!
-  getworkspace(id : String!) : Workspace!
+  getworkspace(id : ID!) : Workspace!
   getworkspacesbyusername(username : String!): [Workspace!]!
   
   getallprojects : [Project!]!
-  getproject(id: String!) : Project!
-  getprojectsbyworkspace(workspaceid: String!): [Project!]!
+  getproject(id: ID!) : Project!
+  getprojectsbyworkspace(workspaceid: ID!): [Project!]!
 }
 
 type Mutation {
   createWorkspace(input: CreateWorkspaceInput!): Workspace!
-  updateWorkspace(id: String!, input: UpdateWorkspaceInput!): Workspace!
-  deleteWorkspace(id: String!): DeleteWorkspaceResponse!
+  updateWorkspace(id: ID!, input: UpdateWorkspaceInput!): Workspace!
+  deleteWorkspace(id: ID!): DeleteWorkspaceResponse!
 
   createProject(input: CreateProjectInput!): Project!
-  updateProject(id: String!, input: UpdateProjectInput!): Project!
-  deleteProject(id: String!): DeleteProjectResponse!
+  updateProject(id: ID!, input: UpdateProjectInput!): Project!
+  deleteProject(id: ID!): DeleteProjectResponse!
  
 }
 
@@ -55,7 +54,7 @@ input CreateProjectInput {
   owner: String!
   status: String
   createdat: String!
-  workspaceid: String!
+  workspaceid: ID!
   token : String
   collaborators: [String]
 }
@@ -70,7 +69,7 @@ input UpdateProjectInput {
   name: String 
   description: String
   status: String
-  workspaceid: String
+  workspaceid: ID
   token: String 
   collaborators: [String]
 
