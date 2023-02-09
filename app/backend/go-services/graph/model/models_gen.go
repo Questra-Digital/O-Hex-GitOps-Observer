@@ -2,16 +2,12 @@
 
 package model
 
-type CreateJobListingInput struct {
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Company     string `json:"company"`
-	URL         string `json:"url"`
-}
-
 type CreateProjectInput struct {
 	Name          string    `json:"name"`
 	Description   string    `json:"description"`
+	Owner         string    `json:"owner"`
+	Status        *string   `json:"status"`
+	Createdat     string    `json:"createdat"`
 	Workspaceid   string    `json:"workspaceid"`
 	Token         *string   `json:"token"`
 	Collaborators []*string `json:"collaborators"`
@@ -22,10 +18,6 @@ type CreateWorkspaceInput struct {
 	Username string `json:"username"`
 }
 
-type DeleteJobResponse struct {
-	DeletedJobID string `json:"deletedJobId"`
-}
-
 type DeleteProjectResponse struct {
 	DeletedProjectID string `json:"deletedProjectId"`
 }
@@ -34,32 +26,22 @@ type DeleteWorkspaceResponse struct {
 	DeletedWorkspaceID string `json:"deletedWorkspaceId"`
 }
 
-type JobListing struct {
-	ID          string `json:"_id"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Company     string `json:"company"`
-	URL         string `json:"url"`
-}
-
 type Project struct {
-	ID            string    `json:"_id"`
+	ID            string    `json:"_id" bson:"_id"`
 	Name          string    `json:"name"`
+	Owner         string    `json:"owner"`
+	Createdat     string    `json:"createdat"`
+	Status        *string   `json:"status"`
 	Description   string    `json:"description"`
 	Workspaceid   string    `json:"workspaceid"`
 	Token         *string   `json:"token"`
 	Collaborators []*string `json:"collaborators"`
 }
 
-type UpdateJobListingInput struct {
-	Title       *string `json:"title"`
-	Description *string `json:"description"`
-	URL         *string `json:"url"`
-}
-
 type UpdateProjectInput struct {
 	Name          *string   `json:"name"`
 	Description   *string   `json:"description"`
+	Status        *string   `json:"status"`
 	Workspaceid   *string   `json:"workspaceid"`
 	Token         *string   `json:"token"`
 	Collaborators []*string `json:"collaborators"`
@@ -70,7 +52,7 @@ type UpdateWorkspaceInput struct {
 }
 
 type Workspace struct {
-	ID       string `json:"_id"`
+	ID       string `json:"_id" bson:"_id"`
 	Name     string `json:"name"`
 	Username string `json:"username"`
 }

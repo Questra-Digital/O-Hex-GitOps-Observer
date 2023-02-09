@@ -8,6 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	// "fmt"
 ) 
 
 
@@ -24,6 +25,7 @@ func (db *DB) GetProject(id string) *model.Project {
 	if err != nil {
 		log.Fatal(err)
 	}
+	
 	return &project
 }
 
@@ -46,29 +48,50 @@ func (db *DB) GetProjectsByWorkspace(workspaceid string) []*model.Project {
 	    if err != nil {
 	        return nil
 	    }
-	    projects = append(projects, &project)
+        projects = append(projects, &project)
 	}
 	if err := cur.Err(); err != nil {
 	    return nil
 	}
 	cur.Close(context.TODO())
-	
 	return projects
 }
 
-
 // get all projects 
 func (db *DB) GetAllProjects() []*model.Project {
-	projectCollec := db.client.Database("ProjectDB").Collection("project")
+	// collection := db.client.Database("ProjectDB").Collection("project")
+	// ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	// defer cancel()
+	// cur, err := collection.Find(ctx, bson.D{})
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// var projects []*model.Project
+	// for cur.Next(ctx) {
+	// 	var project *model.Project
+	// 	err := cur.Decode(&project)
+	// 	if err != nil {
+	// 		log.Fatal(err)
+	// 	}
+	
+	// 	projects = append(projects, project)
+	// }
+	// return projects
+	collection := db.client.Database("ProjectDB").Collection("project")
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
-	var projects []*model.Project
-	cursor, err := projectCollec.Find(ctx, bson.D{})
+	cur, err := collection.Find(ctx, bson.D{})
 	if err != nil {
 		log.Fatal(err)
 	}
-	if err = cursor.All(context.TODO(), &projects); err != nil {
-		panic(err)
+	var projects []*model.Project
+	for cur.Next(ctx) {
+		var project *model.Project
+		err := cur.Decode(&project)
+		if err != nil {
+			log.Fatal(err)
+		}
+		projects = append(projects, project)
 	}
 	return projects
 }
@@ -80,14 +103,14 @@ func (db *DB) CreateProject(projectInfo model.CreateProjectInput) *model.Project
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 	workspaceId , _ := primitive.ObjectIDFromHex(projectInfo.Workspaceid)
-	insert, err := projectCollec.InsertOne(ctx, bson.M{"name": projectInfo.Name, "description": projectInfo.Description, "workspaceid": workspaceId, "token": projectInfo.Token, "collaborators": projectInfo.Collaborators })
+	insert, err := projectCollec.InsertOne(ctx, bson.M{"name": projectInfo.Name, "description": projectInfo.Description, "workspaceid": workspaceId, "token": projectInfo.Token, "collaborators": projectInfo.Collaborators, "status": projectInfo.Status, "createdat": projectInfo.Createdat, "owner": projectInfo.Owner })
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	insertedID := insert.InsertedID.(primitive.ObjectID).Hex()
-	returnProject := model.Project{ID: insertedID, Name: projectInfo.Name, Description: projectInfo.Description, Workspaceid: projectInfo.Workspaceid, Token: projectInfo.Token, Collaborators: projectInfo.Collaborators }
+	returnProject := model.Project{ID: insertedID, Name: projectInfo.Name, Description: projectInfo.Description, Workspaceid: projectInfo.Workspaceid, Token: projectInfo.Token, Collaborators: projectInfo.Collaborators, Status: projectInfo.Status, Createdat: projectInfo.Createdat, Owner: projectInfo.Owner}
 	return &returnProject
 }
 

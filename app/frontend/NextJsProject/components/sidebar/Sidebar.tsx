@@ -1,6 +1,19 @@
 import AddWorkspace from "../modal/AddWorkspace";
+import { useSelector, useDispatch } from "react-redux";
+import { setCurrentWorkspaceId } from "../../store/workspace/currentWorkspaceSlice";
+import type { RootState } from "../../store";
 
 const Sidebar = ({ workspaces }: any) => {
+
+  const dispatch = useDispatch();
+  
+  const handleCurrentWorkspace = (currWorkspaceId: String) => {
+    dispatch(setCurrentWorkspaceId(currWorkspaceId));
+  }
+
+  const currentWorkspaceId = useSelector((state: RootState) => state.currentWorkspaceId.currentWorkspaceId);
+ 
+  
   return (
     <aside
       className="w-64 bg-gray-800  sm:min-h-screen p-3"
@@ -59,10 +72,10 @@ const Sidebar = ({ workspaces }: any) => {
             <ul id="dropdown-example" className=" py-2 space-y-2">
               {workspaces.map((workspace: any, idx: any) => {
                 return (
-                  <li key={idx}>
+                  <li key={idx} onClick={() =>handleCurrentWorkspace(workspace._id)}>
                     <a
                       href="#"
-                      className="flex items-center w-full p-2 text-base  text-gray-500 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                      className={`flex items-center w-full p-2 text-base text-gray-100 transition duration-75 rounded-lg pl-11 group ${currentWorkspaceId === workspace._id ? 'bg-gray-500' : 'hover:bg-gray-100'} dark:text-white dark:hover:bg-gray-700`}
                     >
                       {workspace.name}
                     </a>

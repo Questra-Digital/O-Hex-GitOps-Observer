@@ -1,4 +1,4 @@
-const ListRow = ({ name, owner, created_at, status }) => {
+const ListRow = ({name, owner, createdat, status}: any) => {
   return (
     <tr>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
@@ -19,7 +19,7 @@ const ListRow = ({ name, owner, created_at, status }) => {
         <p className="text-gray-900 whitespace-no-wrap">{owner}</p>
       </td>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <p className="text-gray-900 whitespace-no-wrap">{created_at}</p>
+        <p className="text-gray-900 whitespace-no-wrap">{createdat}</p>
       </td>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
         <p className="text-gray-900 whitespace-no-wrap">details</p>
@@ -29,7 +29,7 @@ const ListRow = ({ name, owner, created_at, status }) => {
           <span
             aria-hidden
             className={`absolute inset-0 bg-${
-              status == "Active" ? "green-200" : "red-200"
+              status == "active" ? "green-200" : "red-200"
             } opacity-50 rounded-full`}
           ></span>
           <span className="relative">{status}</span>

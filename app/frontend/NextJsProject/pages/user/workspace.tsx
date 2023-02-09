@@ -12,6 +12,7 @@ import client from "../../apollo-client";
 const GET_WORKSPACES_QUERY = gql`
   query getWorkspacesByUsername($username: String!) {
     getworkspacesbyusername(username: $username) {
+      _id
       name
     }
   }
