@@ -1,12 +1,13 @@
 import { gql, useQuery } from "@apollo/client";
 import { useSelector, useDispatch } from "react-redux";
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 
 import type { RootState } from "../../store";
 import ListHead from "./ListHead";
 import ListBody from "./ListBody";
 import client from "../../apollo-client";
-import { getProjects } from "../../store/project/projectSlice";
+import { getProjects } from "../../store/project/projectsSlice";
 import AddProject from "../modal/AddProject";
 
 const GET_PROJECTS_QUERY = gql`
@@ -17,11 +18,13 @@ const GET_PROJECTS_QUERY = gql`
       name
       owner
       status
+      _id
     }
   }
 `;
 
 const ProjectList = () => {
+  const router = useRouter();
   const dispatch = useDispatch();
   const currentWorkspaceId = useSelector(
     (state: RootState) => state.currentWorkspaceId.currentWorkspaceId
@@ -43,6 +46,16 @@ const ProjectList = () => {
 
   // Getting workspaces data from redux
   const projects = useSelector((state: RootState) => state.projects.projects);
+  console.log(projects)
+  const workspaces: any = useSelector(
+    (state: RootState) => state.workspaces.workspaces
+  );
+
+  const handleWorkspaceSetting = () => {
+    router.push({
+      pathname: "workspace/setting/" + "ali2022",
+    });
+  };
 
   return (
     <div>
@@ -72,6 +85,11 @@ const ProjectList = () => {
                 id=""
                 placeholder="search..."
               />
+            </div>
+            <div className="lg:ml-40 ml-10 space-x-8">
+              <button onClick={handleWorkspaceSetting} className="bg-teal-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">
+                Workspace Settings
+              </button>
             </div>
             <div className="lg:ml-40 ml-10 space-x-8">
               {/* <button className="bg-indigo-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">

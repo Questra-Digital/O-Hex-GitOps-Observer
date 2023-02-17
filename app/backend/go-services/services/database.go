@@ -14,7 +14,8 @@ import (
 
 
 
-var connectionString string = "mongodb+srv://aliqumail:u4K76WFTDyXCr8P8@cluster0.ttw4l65.mongodb.net/?retryWrites=true&w=majority"
+// var connectionString string = "mongodb+srv://aliqumail:u4K76WFTDyXCr8P8@cluster0.ttw4l65.mongodb.net/?retryWrites=true&w=majority"
+var connectionString string = "mongodb://localhost:27017"
 
 type DB struct {
 	client *mongo.Client

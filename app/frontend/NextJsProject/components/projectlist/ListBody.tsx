@@ -8,6 +8,7 @@ const ListBody = ({ projects }: any) => {
         return (
           <ListRow
             key={idx}
+            _id = {project._id}
             name={project.name}
             owner={project.owner}
             createdat={project.createdat}
