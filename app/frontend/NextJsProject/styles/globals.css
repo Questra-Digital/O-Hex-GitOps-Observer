@@ -18,6 +18,13 @@ a {
   box-sizing: border-box;
 }
 
+border {
+  margin: 10px;
+  width: 20px;
+}
+
+
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: white;
