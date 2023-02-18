@@ -90,7 +90,7 @@ export default function AddProject() {
                 </div>
 
                 <div className="relative p-6 flex-auto">
-                  <div>
+                  <div style={{ width: '300px', height: '50px' }}>
                     <input
                       type="text"
                       id="first_name"
@@ -101,13 +101,12 @@ export default function AddProject() {
                       value={projectName}
                     />
                   </div>
-
-                  <div>
+                  <div style={{ width: '300px', height: '50px' }}>
                     <textarea
                       
                       id="first_name"
                       className=" border border-gray-300 text-red-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="Workspace name..."
+                      placeholder="Workspace description..."
                       required
                       onChange={(e) => setProjectDesc(e.target.value)}
                       value={projectDesc}
