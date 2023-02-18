@@ -1,5 +1,6 @@
 const { GraphQLClient, gql } = require("graphql-request");
-const client = new GraphQLClient("http://localhost:4001/query");
+const workspaceClient = new GraphQLClient("http://localhost:4001/query");
+const projectClient = new GraphQLClient("http://localhost:4002/query");
 
 const resolvers = {
   Query: {
@@ -14,7 +15,7 @@ const resolvers = {
           }
         }
       `;
-      const data = await client.request(query);
+      const data = await workspaceClient.request(query);
       return data.getallworkspaces;
     },
 
@@ -30,7 +31,7 @@ const resolvers = {
         }
       `;
       const username = args.username;
-      const data = await client.request(query, { username: username });
+      const data = await workspaceClient.request(query, { username: username });
       return data.getworkspacesbyusername;
     },
 
@@ -52,7 +53,9 @@ const resolvers = {
         }
       `;
       const workspaceid = args.workspaceid;
-      const data = await client.request(query, { workspaceid: workspaceid });
+      const data = await projectClient.request(query, {
+        workspaceid: workspaceid,
+      });
       return data.getprojectsbyworkspace;
     },
     // Get a project by ID
@@ -71,7 +74,7 @@ const resolvers = {
         }
       `;
       const id = args.id;
-      const data = await client.request(query, { id: id });
+      const data = await projectClient.request(query, { id: id });
       return data.getproject;
     },
   },
@@ -88,7 +91,7 @@ const resolvers = {
           }
         }
       `;
-      const data = await client.request(query, { input: workspace });
+      const data = await workspaceClient.request(query, { input: workspace });
       return data.createWorkspace;
     },
     createProject: async (parent, args) => {
@@ -108,7 +111,7 @@ const resolvers = {
           }
         }
       `;
-      const data = await client.request(query, { input: project });
+      const data = await projectClient.request(query, { input: project });
       return data.createProject;
     },
   },

@@ -25,21 +25,6 @@ func (r *mutationResolver) DeleteWorkspace(ctx context.Context, id string) (*mod
 	return db.DeleteWorkspace(id), nil
 }
 
-// CreateProject is the resolver for the createProject field.
-func (r *mutationResolver) CreateProject(ctx context.Context, input model.CreateProjectInput) (*model.Project, error) {
-	return db.CreateProject(input), nil
-}
-
-// UpdateProject is the resolver for the updateProject field.
-func (r *mutationResolver) UpdateProject(ctx context.Context, id string, input model.UpdateProjectInput) (*model.Project, error) {
-	return db.UpdateProject(id, input), nil
-}
-
-// DeleteProject is the resolver for the deleteProject field.
-func (r *mutationResolver) DeleteProject(ctx context.Context, id string) (*model.DeleteProjectResponse, error) {
-	return db.DeleteProject(id), nil
-}
-
 // Getallworkspaces is the resolver for the getallworkspaces field.
 func (r *queryResolver) Getallworkspaces(ctx context.Context) ([]*model.Workspace, error) {
 	return db.GetAllWorkspaces(), nil
@@ -53,21 +38,6 @@ func (r *queryResolver) Getworkspace(ctx context.Context, id string) (*model.Wor
 // Getworkspacesbyusername is the resolver for the getworkspacesbyusername field.
 func (r *queryResolver) Getworkspacesbyusername(ctx context.Context, username string) ([]*model.Workspace, error) {
 	return db.GetWorkspacesByUsername(username), nil
-}
-
-// Getallprojects is the resolver for the getallprojects field.
-func (r *queryResolver) Getallprojects(ctx context.Context) ([]*model.Project, error) {
-	return db.GetAllProjects(), nil
-}
-
-// Getproject is the resolver for the getproject field.
-func (r *queryResolver) Getproject(ctx context.Context, id string) (*model.Project, error) {
-	return db.GetProject(id), nil
-}
-
-// Getprojectsbyworkspace is the resolver for the getprojectsbyworkspace field.
-func (r *queryResolver) Getprojectsbyworkspace(ctx context.Context, workspaceid string) ([]*model.Project, error) {
-	return db.GetProjectsByWorkspace(workspaceid), nil
 }
 
 // Mutation returns MutationResolver implementation.
