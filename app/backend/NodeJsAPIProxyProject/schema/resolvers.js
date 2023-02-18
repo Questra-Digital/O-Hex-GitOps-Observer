@@ -34,7 +34,7 @@ const resolvers = {
       return data.getworkspacesbyusername;
     },
 
-    // get projects by workspace 
+    // get projects by workspace
     getprojectsbyworkspace: async (parent, args) => {
       const query = gql`
         query ($workspaceid: ID!) {
@@ -54,6 +54,25 @@ const resolvers = {
       const workspaceid = args.workspaceid;
       const data = await client.request(query, { workspaceid: workspaceid });
       return data.getprojectsbyworkspace;
+    },
+    // Get a project by ID
+    getproject: async (parent, args) => {
+      const query = gql`
+        query ($id: ID!) {
+          getproject(id: $id) {
+            _id
+            name
+            description
+            status
+            createdat
+            collaborators
+            workspaceid
+          }
+        }
+      `;
+      const id = args.id;
+      const data = await client.request(query, { id: id });
+      return data.getproject;
     },
   },
 

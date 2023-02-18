@@ -30,7 +30,6 @@ const Workspace = () => {
   useEffect(() => {
     // storing data in redux
     if (!loading && !error) {
-      console.log(data.getworkspacesbyusername);
       dispatch(getWorkspaces(data.getworkspacesbyusername));
     }
   }, [dispatch, loading, error, data]);
@@ -39,6 +38,7 @@ const Workspace = () => {
   const workspaces = useSelector(
     (state: RootState) => state.workspaces.workspaces
   );
+
 
   return (
     <div>

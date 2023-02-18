@@ -1,4 +1,13 @@
-const ListRow = ({name, owner, createdat, status}: any) => {
+import { useRouter } from "next/router";
+
+const ListRow = ({ _id, name, owner, createdat, status }: any) => {
+  const router = useRouter();
+  const handleProject = () => {
+    router.push({
+      pathname: "project/" + _id,
+    });
+  };
+
   return (
     <tr>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
@@ -22,9 +31,6 @@ const ListRow = ({name, owner, createdat, status}: any) => {
         <p className="text-gray-900 whitespace-no-wrap">{createdat}</p>
       </td>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <p className="text-gray-900 whitespace-no-wrap">details</p>
-      </td>
-      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
         <span className="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
           <span
             aria-hidden
@@ -34,6 +40,14 @@ const ListRow = ({name, owner, createdat, status}: any) => {
           ></span>
           <span className="relative">{status}</span>
         </span>
+      </td>
+      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+        <button
+          onClick={handleProject}
+          className="bg-blue-500 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer"
+        >
+          Details
+        </button>
       </td>
     </tr>
   );
