@@ -1,0 +1,15 @@
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+
+
+type Credentials {
+  _id: ID!
+  username: String!
+  botusertoken: String!
+  channelid: [String!]!
+}
+
+type Query {
+  sendmessage(message: String!): String!
+}
