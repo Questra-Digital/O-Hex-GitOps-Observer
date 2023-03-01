@@ -13,17 +13,8 @@ type CreateProjectInput struct {
 	Collaborators []*string `json:"collaborators"`
 }
 
-type CreateWorkspaceInput struct {
-	Name     string `json:"name"`
-	Username string `json:"username"`
-}
-
 type DeleteProjectResponse struct {
 	DeletedProjectID string `json:"deletedProjectId"`
-}
-
-type DeleteWorkspaceResponse struct {
-	DeletedWorkspaceID string `json:"deletedWorkspaceId"`
 }
 
 type Project struct {
@@ -45,14 +36,4 @@ type UpdateProjectInput struct {
 	Workspaceid   *string   `json:"workspaceid"`
 	Token         *string   `json:"token"`
 	Collaborators []*string `json:"collaborators"`
-}
-
-type UpdateWorkspaceInput struct {
-	Name *string `json:"name"`
-}
-
-type Workspace struct {
-	ID       string `json:"_id" bson:"_id"`
-	Name     string `json:"name"`
-	Username string `json:"username"`
 }

@@ -2,50 +2,28 @@
 #
 # https://gqlgen.com/getting-started/
 
-type Workspace {
-  _id: ID!
-  name: String!
-  username: String!
-}
-
 type Project {
-  _id : ID!
+  _id: ID!
   name: String!
   owner: String!
   createdat: String!
   status: String
   description: String!
   workspaceid: ID!
-  token : String
+  token: String
   collaborators: [String]
 }
 
-type Query {  
-  getallworkspaces: [Workspace!]!
-  getworkspace(id : ID!) : Workspace!
-  getworkspacesbyusername(username : String!): [Workspace!]!
-  
-  getallprojects : [Project!]!
-  getproject(id: ID!) : Project!
+type Query {
+  getallprojects: [Project!]!
+  getproject(id: ID!): Project!
   getprojectsbyworkspace(workspaceid: ID!): [Project!]!
 }
 
 type Mutation {
-  createWorkspace(input: CreateWorkspaceInput!): Workspace!
-  updateWorkspace(id: ID!, input: UpdateWorkspaceInput!): Workspace!
-  deleteWorkspace(id: ID!): DeleteWorkspaceResponse!
-
   createProject(input: CreateProjectInput!): Project!
   updateProject(id: ID!, input: UpdateProjectInput!): Project!
   deleteProject(id: ID!): DeleteProjectResponse!
- 
-}
-
-
-input CreateWorkspaceInput {
-  name: String!
-  username: String!
-
 }
 
 input CreateProjectInput {
@@ -55,33 +33,19 @@ input CreateProjectInput {
   status: String
   createdat: String!
   workspaceid: ID!
-  token : String
+  token: String
   collaborators: [String]
-}
-
-
-
-input UpdateWorkspaceInput {
-  name: String
 }
 
 input UpdateProjectInput {
-  name: String 
+  name: String
   description: String
   status: String
   workspaceid: ID
-  token: String 
+  token: String
   collaborators: [String]
-
-}
-
-type DeleteWorkspaceResponse {
-  deletedWorkspaceId: String!
 }
 
 type DeleteProjectResponse {
   deletedProjectId: String!
 }
-
-
-
