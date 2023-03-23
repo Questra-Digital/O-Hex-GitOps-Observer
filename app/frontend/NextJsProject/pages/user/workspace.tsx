@@ -24,7 +24,7 @@ const Workspace = () => {
   // Fetching workspaces data from database
   const { loading, error, data } = useQuery(GET_WORKSPACES_QUERY, {
     client,
-    variables: { username: "ali2022" },
+    variables: { username: "fateh" },
   });
 
   useEffect(() => {
