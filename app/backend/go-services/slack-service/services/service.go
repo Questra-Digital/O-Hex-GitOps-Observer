@@ -47,6 +47,7 @@ func (db *DB) CreateSlackCredentials(slackCredentialsInfo model.CreateSlackCrede
 		"username":     slackCredentialsInfo.Username,
 		"botusertoken": slackCredentialsInfo.Botusertoken,
 		"channels":     channels,
+		"currentchannelid": slackCredentialsInfo.Currentchannelid,
 	}
 
 	// Insert the document into the collection
@@ -62,9 +63,55 @@ func (db *DB) CreateSlackCredentials(slackCredentialsInfo model.CreateSlackCrede
 		ID:            insertedID,
 		Username:      slackCredentialsInfo.Username,
 		Botusertoken:  slackCredentialsInfo.Botusertoken,
+		Currentchannelid: slackCredentialsInfo.Currentchannelid,
 		
 	}
 	return &returnSlackCredentials
+}
+
+func (db *DB) UpdateSlackCredentials(id string, input model.UpdateSlackCredentialsInput) (*model.SlackCredentials, error) {
+    slackCredentialsCollec := db.client.Database("ProjectDB").Collection("slack")
+    ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+    defer cancel()
+
+    // Create an array of channel documents
+    channels := make([]bson.M, len(input.Channels))
+    for i, channel := range input.Channels {
+        channels[i] = bson.M{
+            "channelname": channel.Channelname,
+            "channelid":   channel.Channelid,
+        }
+    }
+
+    // Create a MongoDB filter for the SlackCredentials object to update
+    _id, _ := primitive.ObjectIDFromHex(id)
+	filter := bson.M{"_id": _id}
+
+    // Create a MongoDB update operation for the SlackCredentials object
+    update := bson.M{
+        "$set": bson.M{
+            "username":          input.Username,
+            "botusertoken":      input.Botusertoken,
+            "channels":          channels,
+            "currentchannelid":  input.Currentchannelid,
+        },
+    }
+
+    // Execute the update operation
+    _, err := slackCredentialsCollec.UpdateOne(ctx, filter, update)
+    if err != nil {
+        return nil, err
+    }
+
+    // Return the updated SlackCredentials object
+    updatedSlackCredentials := &model.SlackCredentials{
+        ID:                id,
+        Username:          input.Username,
+        Botusertoken:      input.Botusertoken,
+        Currentchannelid:  input.Currentchannelid,
+    }
+
+    return updatedSlackCredentials, nil
 }
 
 

@@ -1,6 +1,7 @@
 const { GraphQLClient, gql } = require("graphql-request");
 const workspaceClient = new GraphQLClient("http://localhost:4001/query");
 const projectClient = new GraphQLClient("http://localhost:4002/query");
+const slackClient = new GraphQLClient("http://localhost:4004/query");
 
 const resolvers = {
   Query: {
@@ -77,6 +78,50 @@ const resolvers = {
       const data = await projectClient.request(query, { id: id });
       return data.getproject;
     },
+    // returns all workspaces by username
+    getSlackCredentials: async (parent, args) => {
+      const query = gql`
+        query GetSlackCredentials($username: String!) {
+          getSlackCredentials(username: $username) {
+            _id
+            username
+            botusertoken
+            channels {
+              channelid
+              channelname
+            }
+          }
+        }
+      `;
+      const username = args.username;
+      const data = await slackClient.request(query, { username: username });
+      return data.getSlackCredentials;
+    },
+    // returns all workspaces by username
+    sendMessage: async (parent, args) => {
+      const query = gql`
+        query sendMessage(
+          $userbottoken: String!
+          $channelid: String!
+          $message: String!
+        ) {
+          sendMessage(
+            userbottoken: $userbottoken
+            channelid: $channelid
+            message: $message
+          )
+        }
+      `;
+      const userbottoken= args.userbottoken;
+      const channelid = args.channelid;
+      const message = args.message;
+      const data = await slackClient.request(query, {
+        userbottoken: userbottoken,
+        channelid: channelid,
+        message: message,
+      });
+      return data.sendMessage;
+    },
   },
 
   Mutation: {
@@ -113,6 +158,51 @@ const resolvers = {
       `;
       const data = await projectClient.request(query, { input: project });
       return data.createProject;
+    },
+    createSlackCredentials: async (parent, args) => {
+      const credentials = args.input;
+      console.log(credentials);
+      const query = gql`
+        mutation CreateSlackCredentials($input: CreateSlackCredentialsInput!) {
+          createSlackCredentials(input: $input) {
+            _id
+            username
+            botusertoken
+            currentchannelid
+            channels {
+              channelid
+              channelname
+            }
+          }
+        }
+      `;
+      const data = await slackClient.request(query, { input: credentials });
+      return data.createSlackCredentials;
+    },
+    updateSlackCredentials: async (parent, args) => {
+      const credentials = args.input;
+      const id = args.id;
+      const query = gql`
+        mutation UpdateSlackCredentials(
+          $id: ID!
+          $input: UpdateSlackCredentialsInput!
+        ) {
+          updateSlackCredentials(id: $id, input: $input) {
+            username
+            botusertoken
+            currentchannelid
+            channels {
+              channelid
+              channelname
+            }
+          }
+        }
+      `;
+      const data = await slackClient.request(query, {
+        id: id,
+        input: credentials,
+      });
+      return data.updateSlackCredentials;
     },
   },
 };

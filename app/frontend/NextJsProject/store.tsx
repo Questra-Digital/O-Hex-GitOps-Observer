@@ -3,6 +3,7 @@ import workspacesReducer from "./store/workspace/workspaceSlice";
 import projectsReducer from "./store/project/projectsSlice";
 import projectReducer from "./store/project/projectSlice";
 import currentWorkspaceIdReducer from "./store/workspace/currentWorkspaceSlice";
+import currentSlackMenuReducer from "./store/slack/currentSlackMenuSlice";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     projects: projectsReducer,
     currentWorkspaceId: currentWorkspaceIdReducer,
     project: projectReducer,
+    currentSlackMenu: currentSlackMenuReducer
   },
 });
 

@@ -8,12 +8,22 @@ import (
 	"backend/services/graph/model"
 	"backend/services/services"
 	"context"
-
+	
 )
 
 // CreateSlackCredentials is the resolver for the createSlackCredentials field.
 func (r *mutationResolver) CreateSlackCredentials(ctx context.Context, input model.CreateSlackCredentialsInput) (*model.SlackCredentials, error) {
 	return db.CreateSlackCredentials(input), nil
+}
+
+// UpdateSlackCredentials is the resolver for the updateSlackCredentials field.
+func (r *mutationResolver) UpdateSlackCredentials(ctx context.Context, id string, input model.UpdateSlackCredentialsInput) (*model.SlackCredentials, error) {
+	updatedSlackCredentials, err := db.UpdateSlackCredentials(id, input)
+    if err != nil {
+        return nil, err
+    }
+
+    return updatedSlackCredentials, nil
 }
 
 // SendMessage is the resolver for the sendMessage field.

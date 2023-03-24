@@ -52,6 +52,7 @@ type ComplexityRoot struct {
 
 	Mutation struct {
 		CreateSlackCredentials func(childComplexity int, input model.CreateSlackCredentialsInput) int
+		UpdateSlackCredentials func(childComplexity int, id string, input model.UpdateSlackCredentialsInput) int
 	}
 
 	Query struct {
@@ -60,15 +61,17 @@ type ComplexityRoot struct {
 	}
 
 	SlackCredentials struct {
-		Botusertoken func(childComplexity int) int
-		Channels     func(childComplexity int) int
-		ID           func(childComplexity int) int
-		Username     func(childComplexity int) int
+		Botusertoken     func(childComplexity int) int
+		Channels         func(childComplexity int) int
+		Currentchannelid func(childComplexity int) int
+		ID               func(childComplexity int) int
+		Username         func(childComplexity int) int
 	}
 }
 
 type MutationResolver interface {
 	CreateSlackCredentials(ctx context.Context, input model.CreateSlackCredentialsInput) (*model.SlackCredentials, error)
+	UpdateSlackCredentials(ctx context.Context, id string, input model.UpdateSlackCredentialsInput) (*model.SlackCredentials, error)
 }
 type QueryResolver interface {
 	SendMessage(ctx context.Context, userbottoken string, channelid string, message string) (string, error)
@@ -116,6 +119,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.CreateSlackCredentials(childComplexity, args["input"].(model.CreateSlackCredentialsInput)), true
 
+	case "Mutation.updateSlackCredentials":
+		if e.complexity.Mutation.UpdateSlackCredentials == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateSlackCredentials_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateSlackCredentials(childComplexity, args["id"].(string), args["input"].(model.UpdateSlackCredentialsInput)), true
+
 	case "Query.getSlackCredentials":
 		if e.complexity.Query.GetSlackCredentials == nil {
 			break
@@ -154,6 +169,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.SlackCredentials.Channels(childComplexity), true
 
+	case "SlackCredentials.currentchannelid":
+		if e.complexity.SlackCredentials.Currentchannelid == nil {
+			break
+		}
+
+		return e.complexity.SlackCredentials.Currentchannelid(childComplexity), true
+
 	case "SlackCredentials._id":
 		if e.complexity.SlackCredentials.ID == nil {
 			break
@@ -178,6 +200,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
 		ec.unmarshalInputChannelInput,
 		ec.unmarshalInputCreateSlackCredentialsInput,
+		ec.unmarshalInputUpdateSlackCredentialsInput,
 	)
 	first := true
 
@@ -269,6 +292,30 @@ func (ec *executionContext) field_Mutation_createSlackCredentials_args(ctx conte
 		}
 	}
 	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateSlackCredentials_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 model.UpdateSlackCredentialsInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateSlackCredentialsInput2backendᚋservicesᚋgraphᚋmodelᚐUpdateSlackCredentialsInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
 	return args, nil
 }
 
@@ -504,6 +551,8 @@ func (ec *executionContext) fieldContext_Mutation_createSlackCredentials(ctx con
 				return ec.fieldContext_SlackCredentials__id(ctx, field)
 			case "username":
 				return ec.fieldContext_SlackCredentials_username(ctx, field)
+			case "currentchannelid":
+				return ec.fieldContext_SlackCredentials_currentchannelid(ctx, field)
 			case "botusertoken":
 				return ec.fieldContext_SlackCredentials_botusertoken(ctx, field)
 			case "channels":
@@ -520,6 +569,73 @@ func (ec *executionContext) fieldContext_Mutation_createSlackCredentials(ctx con
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_createSlackCredentials_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateSlackCredentials(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateSlackCredentials(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateSlackCredentials(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdateSlackCredentialsInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.SlackCredentials)
+	fc.Result = res
+	return ec.marshalNSlackCredentials2ᚖbackendᚋservicesᚋgraphᚋmodelᚐSlackCredentials(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateSlackCredentials(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "_id":
+				return ec.fieldContext_SlackCredentials__id(ctx, field)
+			case "username":
+				return ec.fieldContext_SlackCredentials_username(ctx, field)
+			case "currentchannelid":
+				return ec.fieldContext_SlackCredentials_currentchannelid(ctx, field)
+			case "botusertoken":
+				return ec.fieldContext_SlackCredentials_botusertoken(ctx, field)
+			case "channels":
+				return ec.fieldContext_SlackCredentials_channels(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type SlackCredentials", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateSlackCredentials_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return
 	}
@@ -624,6 +740,8 @@ func (ec *executionContext) fieldContext_Query_getSlackCredentials(ctx context.C
 				return ec.fieldContext_SlackCredentials__id(ctx, field)
 			case "username":
 				return ec.fieldContext_SlackCredentials_username(ctx, field)
+			case "currentchannelid":
+				return ec.fieldContext_SlackCredentials_currentchannelid(ctx, field)
 			case "botusertoken":
 				return ec.fieldContext_SlackCredentials_botusertoken(ctx, field)
 			case "channels":
@@ -851,6 +969,50 @@ func (ec *executionContext) _SlackCredentials_username(ctx context.Context, fiel
 }
 
 func (ec *executionContext) fieldContext_SlackCredentials_username(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SlackCredentials",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SlackCredentials_currentchannelid(ctx context.Context, field graphql.CollectedField, obj *model.SlackCredentials) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SlackCredentials_currentchannelid(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Currentchannelid, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SlackCredentials_currentchannelid(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SlackCredentials",
 		Field:      field,
@@ -2773,7 +2935,7 @@ func (ec *executionContext) unmarshalInputCreateSlackCredentialsInput(ctx contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"username", "botusertoken", "channels"}
+	fieldsInOrder := [...]string{"username", "botusertoken", "currentchannelid", "channels"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -2793,6 +2955,66 @@ func (ec *executionContext) unmarshalInputCreateSlackCredentialsInput(ctx contex
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("botusertoken"))
 			it.Botusertoken, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "currentchannelid":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("currentchannelid"))
+			it.Currentchannelid, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "channels":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("channels"))
+			it.Channels, err = ec.unmarshalNChannelInput2ᚕᚖbackendᚋservicesᚋgraphᚋmodelᚐChannelInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateSlackCredentialsInput(ctx context.Context, obj interface{}) (model.UpdateSlackCredentialsInput, error) {
+	var it model.UpdateSlackCredentialsInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"username", "botusertoken", "currentchannelid", "channels"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "username":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("username"))
+			it.Username, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "botusertoken":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("botusertoken"))
+			it.Botusertoken, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "currentchannelid":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("currentchannelid"))
+			it.Currentchannelid, err = ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -2876,6 +3098,15 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createSlackCredentials(ctx, field)
+			})
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "updateSlackCredentials":
+
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateSlackCredentials(ctx, field)
 			})
 
 			if out.Values[i] == graphql.Null {
@@ -3000,6 +3231,13 @@ func (ec *executionContext) _SlackCredentials(ctx context.Context, sel ast.Selec
 		case "username":
 
 			out.Values[i] = ec._SlackCredentials_username(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "currentchannelid":
+
+			out.Values[i] = ec._SlackCredentials_currentchannelid(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
@@ -3485,6 +3723,11 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) unmarshalNUpdateSlackCredentialsInput2backendᚋservicesᚋgraphᚋmodelᚐUpdateSlackCredentialsInput(ctx context.Context, v interface{}) (model.UpdateSlackCredentialsInput, error) {
+	res, err := ec.unmarshalInputUpdateSlackCredentialsInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalN__Directive2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirective(ctx context.Context, sel ast.SelectionSet, v introspection.Directive) graphql.Marshaler {

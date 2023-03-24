@@ -5,6 +5,7 @@
 type SlackCredentials {
   _id: ID!
   username: String!
+  currentchannelid: String!
   botusertoken: String!
   channels: [Channel!]!
 }
@@ -21,12 +22,20 @@ type Query {
 
 type Mutation {
   createSlackCredentials(input: CreateSlackCredentialsInput!): SlackCredentials!
+  updateSlackCredentials(id: ID!, input: UpdateSlackCredentialsInput!): SlackCredentials!
+}
 
+input UpdateSlackCredentialsInput {
+  username: String!
+  botusertoken: String!
+  currentchannelid: String!
+  channels: [ChannelInput!]!
 }
 
 input CreateSlackCredentialsInput {
   username: String!
   botusertoken: String!
+  currentchannelid: String!
   channels: [ChannelInput!]!
 }
 

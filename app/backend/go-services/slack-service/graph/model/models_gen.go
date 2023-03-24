@@ -13,14 +13,23 @@ type ChannelInput struct {
 }
 
 type CreateSlackCredentialsInput struct {
-	Username     string          `json:"username"`
-	Botusertoken string          `json:"botusertoken"`
-	Channels     []*ChannelInput `json:"channels"`
+	Username         string          `json:"username"`
+	Botusertoken     string          `json:"botusertoken"`
+	Currentchannelid string          `json:"currentchannelid"`
+	Channels         []*ChannelInput `json:"channels"`
 }
 
 type SlackCredentials struct {
-	ID           string     `json:"_id"`
-	Username     string     `json:"username"`
-	Botusertoken string     `json:"botusertoken"`
-	Channels     []*Channel `json:"channels"`
+	ID               string     `json:"_id"`
+	Username         string     `json:"username"`
+	Currentchannelid string     `json:"currentchannelid"`
+	Botusertoken     string     `json:"botusertoken"`
+	Channels         []*Channel `json:"channels"`
+}
+
+type UpdateSlackCredentialsInput struct {
+	Username         string          `json:"username"`
+	Botusertoken     string          `json:"botusertoken"`
+	Currentchannelid string          `json:"currentchannelid"`
+	Channels         []*ChannelInput `json:"channels"`
 }
