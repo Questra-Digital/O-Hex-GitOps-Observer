@@ -1,0 +1,45 @@
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+
+type SlackCredentials {
+  _id: ID!
+  username: String!
+  currentchannelid: String!
+  botusertoken: String!
+  channels: [Channel!]!
+}
+
+type Channel {
+  channelname: String!
+  channelid: String!
+}
+
+type Query {
+  sendMessage(userbottoken: String!, channelid: String!, message: String!): String!
+  getSlackCredentials(username: String!): SlackCredentials!
+}
+
+type Mutation {
+  createSlackCredentials(input: CreateSlackCredentialsInput!): SlackCredentials!
+  updateSlackCredentials(id: ID!, input: UpdateSlackCredentialsInput!): SlackCredentials!
+}
+
+input UpdateSlackCredentialsInput {
+  username: String!
+  botusertoken: String!
+  currentchannelid: String!
+  channels: [ChannelInput!]!
+}
+
+input CreateSlackCredentialsInput {
+  username: String!
+  botusertoken: String!
+  currentchannelid: String!
+  channels: [ChannelInput!]!
+}
+
+input ChannelInput {
+  channelname: String!
+  channelid: String!
+}

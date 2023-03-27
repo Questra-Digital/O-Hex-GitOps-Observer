@@ -19,6 +19,19 @@ const typeDefs = gql`
     collaborators: [String]
   }
 
+  type SlackCredentials {
+    _id: ID!
+    username: String!
+    currentchannelid: String!
+    botusertoken: String!
+    channels: [Channel!]!
+  }
+
+  type Channel {
+    channelname: String!
+    channelid: String!
+  }
+
   type Query {
     getallworkspaces: [Workspace!]!
     getworkspace(id: ID!): Workspace!
@@ -27,6 +40,13 @@ const typeDefs = gql`
     getallprojects: [Project!]!
     getproject(id: ID!): Project!
     getprojectsbyworkspace(workspaceid: ID!): [Project!]!
+
+    sendMessage(
+      userbottoken: String!
+      channelid: String!
+      message: String!
+    ): String!
+    getSlackCredentials(username: String!): SlackCredentials!
   }
 
   input CreateWorkspaceInput {
@@ -66,6 +86,25 @@ const typeDefs = gql`
     deletedProjectId: String!
   }
 
+  input CreateSlackCredentialsInput {
+    username: String!
+    botusertoken: String!
+    currentchannelid: String!
+    channels: [ChannelInput!]!
+  }
+
+  input ChannelInput {
+    channelname: String!
+    channelid: String!
+  }
+
+  input UpdateSlackCredentialsInput {
+    username: String!
+    botusertoken: String!
+    currentchannelid: String!
+    channels: [ChannelInput!]!
+  }
+
   type Mutation {
     createWorkspace(input: CreateWorkspaceInput!): Workspace!
     updateWorkspace(id: ID!, input: UpdateWorkspaceInput!): Workspace!
@@ -74,6 +113,14 @@ const typeDefs = gql`
     createProject(input: CreateProjectInput!): Project!
     updateProject(id: ID!, input: UpdateProjectInput!): Project!
     deleteProject(id: ID!): DeleteProjectResponse!
+
+    createSlackCredentials(
+      input: CreateSlackCredentialsInput!
+    ): SlackCredentials!
+    updateSlackCredentials(
+      id: ID!
+      input: UpdateSlackCredentialsInput!
+    ): SlackCredentials!
   }
 `;
 
