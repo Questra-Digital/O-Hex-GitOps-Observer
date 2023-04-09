@@ -21,8 +21,10 @@ const Setting = () => {
   // Getting workspaces data from redux
   const router = useRouter();
 
-  const { username } = router.query;
+  //const { username } = router.query;
   const dispatch = useDispatch();
+
+  const username = "ali2022"
 
   console.log("the username is " + username);
 
@@ -44,7 +46,48 @@ const Setting = () => {
     (state: RootState) => state.workspaces.workspaces
   );
 
-  
+  const updateWorkspace = async () => {
+    // make request to delete the workspace in the database
+    // The two inputs are workspace name & username
+    const { data } = await client.mutate({
+      mutation: gql`
+        mutation updateWorkspace($input: UpdateWorkspaceInput!) {
+          updateWorkspace(input: $input) {
+            id 
+            name
+          }
+        }
+      `,
+      variables: {
+        input: {
+          id: 123,
+          name: "ali2022",
+        },
+      },
+    });
+  };
+
+  const deleteWorkspace = async () => {
+    // make request to delete the workspace in the database
+    // The two inputs are workspace name & username
+    const { data } = await client.mutate({
+      mutation: gql`
+        mutation deleteWorkspace($id: workspace._id, $name: workspace.name) {
+          deleteWorkspace(input: $input) {
+            id
+            name
+          }
+        }
+      `,
+      variables: {
+        input: {
+          id: 123,
+          name: "ali2022",
+        },
+      },
+    });
+  };
+
   return (
     <div>
       <Header />
@@ -104,12 +147,12 @@ const Setting = () => {
                           {workspace.name}
                         </td>
                         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                          <button className="bg-teal-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">
+                          <button onClick={updateWorkspace} className="bg-teal-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">
                             Update
                           </button>
                         </td>
                         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                          <button className="bg-red-500 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">
+                          <button onClick={deleteWorkspace} className="bg-red-500 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">
                             Delete
                           </button>
                         </td>

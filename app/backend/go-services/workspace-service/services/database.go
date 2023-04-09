@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"time"
+
 	// "backend/services/graph/model"
 	// "go.mongodb.org/mongo-driver/bson"
 	// "go.mongodb.org/mongo-driver/bson/primitive"
@@ -12,10 +13,9 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
-
-
+// local db: mongodb://localhost:27017
 // var connectionString string = "mongodb+srv://aliqumail:u4K76WFTDyXCr8P8@cluster0.ttw4l65.mongodb.net/?retryWrites=true&w=majority"
-var connectionString string = "mongodb://localhost:27017"
+var connectionString string = "mongodb+srv://aliqumail:u4K76WFTDyXCr8P8@cluster0.ttw4l65.mongodb.net/?retryWrites=true&w=majority"
 
 type DB struct {
 	client *mongo.Client
@@ -41,5 +41,3 @@ func Connect() *DB {
 		client: client,
 	}
 }
-
-
