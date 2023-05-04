@@ -2,9 +2,31 @@ const { GraphQLClient, gql } = require("graphql-request");
 const workspaceClient = new GraphQLClient("http://localhost:4001/query");
 const projectClient = new GraphQLClient("http://localhost:4002/query");
 const slackClient = new GraphQLClient("http://localhost:4004/query");
+const argoCdClient = new GraphQLClient("http://localhost:8088/query");
 
 const resolvers = {
   Query: {
+
+
+    job: async (parent, args) => {
+      const query = gql`
+      query GetJob($id: ID!){
+        job(id: $id){
+          items{
+            spec{
+              source{
+                targetRevision
+              }
+              project
+            }
+          }
+        }
+      }
+      `;
+      const id = args.id;
+      const data = await argoCdClient.request(query, { id: id });
+      return data.job;
+    },
     // It will return all workspaces in the database
     getallworkspaces: async () => {
       const query = gql`
@@ -19,6 +41,7 @@ const resolvers = {
       const data = await workspaceClient.request(query);
       return data.getallworkspaces;
     },
+
 
     // returns all workspaces by username
     getworkspacesbyusername: async (parent, args) => {
@@ -123,7 +146,7 @@ const resolvers = {
       return data.sendMessage;
     },
   },
-
+//-------------------------------------------------------------------------------------------------------------------------------------
   Mutation: {
     createWorkspace: async (parent, args) => {
       const workspace = args.input;
@@ -139,6 +162,21 @@ const resolvers = {
       const data = await workspaceClient.request(query, { input: workspace });
       return data.createWorkspace;
     },
+    updateJobToken: async (parent, args) => {
+      const query = gql`
+      mutation UpdateJobToken($id: ID!, $token: String!) {
+        updateJobToken(id: $id, token: $token)
+        {
+          token
+        }
+      }
+      `;
+      const id = args.id;
+      const token = args.token;
+      const data = await argoCdClient.request(query, { id: id, token: token });
+      return data.updateJobToken;
+    },
+    
     createProject: async (parent, args) => {
       const project = args.input;
       const query = gql`
