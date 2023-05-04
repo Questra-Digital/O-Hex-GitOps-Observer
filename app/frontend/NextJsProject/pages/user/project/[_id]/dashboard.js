@@ -1,10 +1,9 @@
 import Head from 'next/head';
 
-
-import Header from '../../../components/Dashboard/Header';
-import TopCards from '../../../components/Dashboard/TopCards';
-import BarChart from '../../../components/Dashboard/BarChart';
-import RecentOrders from '../../../components/Dashboard/RecentOrders';
+import Header from '../../../../components/Dashboard/Header';
+import TopCards from '../../../../components/Dashboard/TopCards';
+import BarChart from '../../../../components/Dashboard/BarChart';
+import RecentOrders from '../../../../components/Dashboard/RecentOrders';
 
 export default function Home() {
   return (
