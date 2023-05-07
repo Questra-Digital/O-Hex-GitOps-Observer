@@ -1,11 +1,14 @@
 import { useRouter } from "next/router";
 import { gql, useQuery } from "@apollo/client";
-import client from "../../../apollo-client";
+import client from "../../../../apollo-client";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getProject } from "../../../store/project/projectSlice";
-import type { RootState } from "../../../store";
-import Header from "../../../components/header/Header";
+import { getProject } from "../../../../store/project/projectSlice";
+import type { RootState } from "../../../../store";
+import Header from "../../../../components/header/Header";
+
+import Link from "next/link";
+import AddToken from "../../../../components/modal/AddToken";
 
 const GET_PROJECT_QUERY = gql`
   query GetProject($id: ID!) {
@@ -40,6 +43,12 @@ const Project = () => {
 
   const project: any = useSelector((state: RootState) => state.project.project);
 
+  const handleDashboard = () => {
+    router.push({
+      pathname: "/user/project/" + _id + "/dashboard",
+    });
+  };
+
   return (
     <div>
       <Header />
@@ -53,12 +62,13 @@ const Project = () => {
           </div>
         </div>
       </div>
-      
+
       {/* here */}
       <div className="w-full bg-dark">
         <div className=" p-8  w-3/4">
-          <div className="flex items-center justify-between p-6 w-3/4"
-          style={{ boxShadow: "0 5px 15px rgba(0, 0, 0, 0.35)" }}
+          <div
+            className="flex items-center justify-between p-6 w-3/4"
+            style={{ boxShadow: "0 5px 15px rgba(0, 0, 0, 0.35)" }}
           >
             <div>
               <h1 className="text-gray-700 font-semibold ">Id</h1>
@@ -81,12 +91,16 @@ const Project = () => {
                 <button className="bg-red-500 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">
                   Delete
                 </button>
-                <button className="bg-gray-500 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">
+                <button
+                  onClick={() => handleDashboard()}
+                  className="bg-gray-500 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer"
+                >
                   Dashboard
                 </button>
-                <button className="bg-gray-500 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">
+                {/* <button className="bg-gray-500 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">
                   Add Token/URL
-                </button>
+                </button> */}
+                <AddToken/>
                 <button className="bg-gray-500 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">
                   Add Collaborators
                 </button>
