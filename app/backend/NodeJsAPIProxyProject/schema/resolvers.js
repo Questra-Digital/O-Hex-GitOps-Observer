@@ -6,22 +6,20 @@ const argoCdClient = new GraphQLClient("http://localhost:8088/query");
 
 const resolvers = {
   Query: {
-
-
     job: async (parent, args) => {
       const query = gql`
-      query GetJob($id: ID!){
-        job(id: $id){
-          items{
-            spec{
-              source{
-                targetRevision
+        query GetJob($id: ID!) {
+          job(id: $id) {
+            items {
+              spec {
+                source {
+                  targetRevision
+                }
+                project
               }
-              project
             }
           }
         }
-      }
       `;
       const id = args.id;
       const data = await argoCdClient.request(query, { id: id });
@@ -41,7 +39,6 @@ const resolvers = {
       const data = await workspaceClient.request(query);
       return data.getallworkspaces;
     },
-
 
     // returns all workspaces by username
     getworkspacesbyusername: async (parent, args) => {
@@ -109,6 +106,7 @@ const resolvers = {
             _id
             username
             botusertoken
+            currentchannelid
             channels {
               channelid
               channelname
@@ -120,33 +118,8 @@ const resolvers = {
       const data = await slackClient.request(query, { username: username });
       return data.getSlackCredentials;
     },
-    // returns all workspaces by username
-    sendMessage: async (parent, args) => {
-      const query = gql`
-        query sendMessage(
-          $userbottoken: String!
-          $channelid: String!
-          $message: String!
-        ) {
-          sendMessage(
-            userbottoken: $userbottoken
-            channelid: $channelid
-            message: $message
-          )
-        }
-      `;
-      const userbottoken= args.userbottoken;
-      const channelid = args.channelid;
-      const message = args.message;
-      const data = await slackClient.request(query, {
-        userbottoken: userbottoken,
-        channelid: channelid,
-        message: message,
-      });
-      return data.sendMessage;
-    },
   },
-//-------------------------------------------------------------------------------------------------------------------------------------
+  //-------------------------------------------------------------------------------------------------------------------------------------
   Mutation: {
     createWorkspace: async (parent, args) => {
       const workspace = args.input;
@@ -164,19 +137,18 @@ const resolvers = {
     },
     updateJobToken: async (parent, args) => {
       const query = gql`
-      mutation UpdateJobToken($id: ID!, $token: String!) {
-        updateJobToken(id: $id, token: $token)
-        {
-          token
+        mutation UpdateJobToken($id: ID!, $token: String!) {
+          updateJobToken(id: $id, token: $token) {
+            token
+          }
         }
-      }
       `;
       const id = args.id;
       const token = args.token;
       const data = await argoCdClient.request(query, { id: id, token: token });
       return data.updateJobToken;
     },
-    
+
     createProject: async (parent, args) => {
       const project = args.input;
       const query = gql`
@@ -241,6 +213,31 @@ const resolvers = {
         input: credentials,
       });
       return data.updateSlackCredentials;
+    },
+    // returns all workspaces by username
+    sendMessage: async (parent, args) => {
+      const query = gql`
+        mutation sendMessage(
+          $userbottoken: String!
+          $channelid: String!
+          $message: String!
+        ) {
+          sendMessage(
+            userbottoken: $userbottoken
+            channelid: $channelid
+            message: $message
+          )
+        }
+      `;
+      const userbottoken = args.userbottoken;
+      const channelid = args.channelid;
+      const message = args.message;
+      const data = await slackClient.request(query, {
+        userbottoken: userbottoken,
+        channelid: channelid,
+        message: message,
+      });
+      return data.sendMessage;
     },
   },
 };

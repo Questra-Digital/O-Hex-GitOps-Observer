@@ -41,11 +41,7 @@ const typeDefs = gql`
     getproject(id: ID!): Project!
     getprojectsbyworkspace(workspaceid: ID!): [Project!]!
 
-    sendMessage(
-      userbottoken: String!
-      channelid: String!
-      message: String!
-    ): String!
+   
     getSlackCredentials(username: String!): SlackCredentials!
   }
 
@@ -121,6 +117,11 @@ const typeDefs = gql`
       id: ID!
       input: UpdateSlackCredentialsInput!
     ): SlackCredentials!
+    sendMessage(
+      userbottoken: String!
+      channelid: String!
+      message: String!
+    ): String!
   }
 
 

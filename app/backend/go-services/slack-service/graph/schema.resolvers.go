@@ -8,7 +8,6 @@ import (
 	"backend/services/graph/model"
 	"backend/services/services"
 	"context"
-	
 )
 
 // CreateSlackCredentials is the resolver for the createSlackCredentials field.
@@ -19,15 +18,15 @@ func (r *mutationResolver) CreateSlackCredentials(ctx context.Context, input mod
 // UpdateSlackCredentials is the resolver for the updateSlackCredentials field.
 func (r *mutationResolver) UpdateSlackCredentials(ctx context.Context, id string, input model.UpdateSlackCredentialsInput) (*model.SlackCredentials, error) {
 	updatedSlackCredentials, err := db.UpdateSlackCredentials(id, input)
-    if err != nil {
-        return nil, err
-    }
+	if err != nil {
+		return nil, err
+	}
 
-    return updatedSlackCredentials, nil
+	return updatedSlackCredentials, nil
 }
 
 // SendMessage is the resolver for the sendMessage field.
-func (r *queryResolver) SendMessage(ctx context.Context, userbottoken string, channelid string, message string) (string, error) {
+func (r *mutationResolver) SendMessage(ctx context.Context, userbottoken string, channelid string, message string) (string, error) {
 	return db.SendMessage(userbottoken, channelid, message), nil
 }
 
@@ -51,4 +50,8 @@ type queryResolver struct{ *Resolver }
 //   - When renaming or deleting a resolver the old code will be put in here. You can safely delete
 //     it when you're done.
 //   - You have helper methods in this file. Move them out to keep these resolver files clean.
+func (r *queryResolver) SendMessage(ctx context.Context, userbottoken string, channelid string, message string) (string, error) {
+	return db.SendMessage(userbottoken, channelid, message), nil
+}
+
 var db = services.Connect()

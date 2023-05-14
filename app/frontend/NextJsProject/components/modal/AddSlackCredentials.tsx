@@ -59,6 +59,7 @@ export default function AddSlackCredentials() {
         className="bg-gray-100 hover:bg-gray-200 py-2 px-4 rounded-lg"
         type="button"
         onClick={() => setShowModal(true)}
+
       >
         Add Credentials
       </button>

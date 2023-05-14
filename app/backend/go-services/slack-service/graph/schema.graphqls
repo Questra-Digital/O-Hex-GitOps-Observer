@@ -16,13 +16,13 @@ type Channel {
 }
 
 type Query {
-  sendMessage(userbottoken: String!, channelid: String!, message: String!): String!
   getSlackCredentials(username: String!): SlackCredentials!
 }
 
 type Mutation {
   createSlackCredentials(input: CreateSlackCredentialsInput!): SlackCredentials!
   updateSlackCredentials(id: ID!, input: UpdateSlackCredentialsInput!): SlackCredentials!
+  sendMessage(userbottoken: String!, channelid: String!, message: String!): String!
 }
 
 input UpdateSlackCredentialsInput {

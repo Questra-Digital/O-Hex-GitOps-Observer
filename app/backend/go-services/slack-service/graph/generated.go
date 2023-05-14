@@ -52,12 +52,12 @@ type ComplexityRoot struct {
 
 	Mutation struct {
 		CreateSlackCredentials func(childComplexity int, input model.CreateSlackCredentialsInput) int
+		SendMessage            func(childComplexity int, userbottoken string, channelid string, message string) int
 		UpdateSlackCredentials func(childComplexity int, id string, input model.UpdateSlackCredentialsInput) int
 	}
 
 	Query struct {
 		GetSlackCredentials func(childComplexity int, username string) int
-		SendMessage         func(childComplexity int, userbottoken string, channelid string, message string) int
 	}
 
 	SlackCredentials struct {
@@ -72,9 +72,9 @@ type ComplexityRoot struct {
 type MutationResolver interface {
 	CreateSlackCredentials(ctx context.Context, input model.CreateSlackCredentialsInput) (*model.SlackCredentials, error)
 	UpdateSlackCredentials(ctx context.Context, id string, input model.UpdateSlackCredentialsInput) (*model.SlackCredentials, error)
+	SendMessage(ctx context.Context, userbottoken string, channelid string, message string) (string, error)
 }
 type QueryResolver interface {
-	SendMessage(ctx context.Context, userbottoken string, channelid string, message string) (string, error)
 	GetSlackCredentials(ctx context.Context, username string) (*model.SlackCredentials, error)
 }
 
@@ -119,6 +119,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.CreateSlackCredentials(childComplexity, args["input"].(model.CreateSlackCredentialsInput)), true
 
+	case "Mutation.sendMessage":
+		if e.complexity.Mutation.SendMessage == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_sendMessage_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.SendMessage(childComplexity, args["userbottoken"].(string), args["channelid"].(string), args["message"].(string)), true
+
 	case "Mutation.updateSlackCredentials":
 		if e.complexity.Mutation.UpdateSlackCredentials == nil {
 			break
@@ -142,18 +154,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.GetSlackCredentials(childComplexity, args["username"].(string)), true
-
-	case "Query.sendMessage":
-		if e.complexity.Query.SendMessage == nil {
-			break
-		}
-
-		args, err := ec.field_Query_sendMessage_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.SendMessage(childComplexity, args["userbottoken"].(string), args["channelid"].(string), args["message"].(string)), true
 
 	case "SlackCredentials.botusertoken":
 		if e.complexity.SlackCredentials.Botusertoken == nil {
@@ -295,6 +295,39 @@ func (ec *executionContext) field_Mutation_createSlackCredentials_args(ctx conte
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_sendMessage_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["userbottoken"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userbottoken"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["userbottoken"] = arg0
+	var arg1 string
+	if tmp, ok := rawArgs["channelid"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("channelid"))
+		arg1, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["channelid"] = arg1
+	var arg2 string
+	if tmp, ok := rawArgs["message"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("message"))
+		arg2, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["message"] = arg2
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_updateSlackCredentials_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -346,39 +379,6 @@ func (ec *executionContext) field_Query_getSlackCredentials_args(ctx context.Con
 		}
 	}
 	args["username"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Query_sendMessage_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["userbottoken"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userbottoken"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["userbottoken"] = arg0
-	var arg1 string
-	if tmp, ok := rawArgs["channelid"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("channelid"))
-		arg1, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["channelid"] = arg1
-	var arg2 string
-	if tmp, ok := rawArgs["message"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("message"))
-		arg2, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["message"] = arg2
 	return args, nil
 }
 
@@ -642,8 +642,8 @@ func (ec *executionContext) fieldContext_Mutation_updateSlackCredentials(ctx con
 	return fc, nil
 }
 
-func (ec *executionContext) _Query_sendMessage(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_sendMessage(ctx, field)
+func (ec *executionContext) _Mutation_sendMessage(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_sendMessage(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -656,7 +656,7 @@ func (ec *executionContext) _Query_sendMessage(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().SendMessage(rctx, fc.Args["userbottoken"].(string), fc.Args["channelid"].(string), fc.Args["message"].(string))
+		return ec.resolvers.Mutation().SendMessage(rctx, fc.Args["userbottoken"].(string), fc.Args["channelid"].(string), fc.Args["message"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -673,9 +673,9 @@ func (ec *executionContext) _Query_sendMessage(ctx context.Context, field graphq
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Query_sendMessage(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Mutation_sendMessage(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "Query",
+		Object:     "Mutation",
 		Field:      field,
 		IsMethod:   true,
 		IsResolver: true,
@@ -690,7 +690,7 @@ func (ec *executionContext) fieldContext_Query_sendMessage(ctx context.Context, 
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_sendMessage_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Mutation_sendMessage_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return
 	}
@@ -3112,6 +3112,15 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "sendMessage":
+
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_sendMessage(ctx, field)
+			})
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -3142,29 +3151,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Query")
-		case "sendMessage":
-			field := field
-
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_sendMessage(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
-			}
-
-			out.Concurrently(i, func() graphql.Marshaler {
-				return rrm(innerCtx)
-			})
 		case "getSlackCredentials":
 			field := field
 
