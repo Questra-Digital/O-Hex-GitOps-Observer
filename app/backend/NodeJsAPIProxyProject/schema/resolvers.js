@@ -16,9 +16,112 @@ const resolvers = {
             spec{
               source{
                 targetRevision
+                repoURL
+                path
               }
               project
+              syncPolicy {
+                syncOptions
+                automated {
+                  prune
+                  selfHeal
+                }
+              }
+              destination {
+                server
+                namespace
+              }
             }
+            status {
+              health {
+                status
+              }
+              sync {
+                syncOptions
+              }
+              resources {
+                version
+                syncPhase
+                status
+                namespace
+                name
+              }
+              summary {
+                images
+              }
+              sourceType
+              reconciledAt
+              operationState {
+                syncResult {
+                  source {
+                    repoURL
+                    targetRevision
+                    path
+                  }
+                  revision
+                  resources {
+                    version
+                    syncPhase
+                    status
+                    namespace
+                    name
+                    message
+                    kind
+                    hookPhase
+                    group
+                  }
+                }
+                startedAt
+                phase
+                operation {
+                  sync {
+                    revision
+                    syncOptions
+                    prune
+                  }
+                  retry {
+                    limit
+                  }
+                  initiatedBy {
+                    automated
+                  }
+                }
+                message
+                finishedAt
+              }
+              history {
+                source {
+                  targetRevision
+                  repoURL
+                  path
+                }
+                revision
+                id
+                deployedAt
+                deployStartedAt
+              }
+            }
+            metadata {
+              creationTimestamp
+              uid
+              resourceVersion
+              namespace
+              name
+              managedFields {
+                apiVersion
+                fieldsType
+                manager
+                operation
+                time
+              }
+              generation
+              annotations {
+                kubectlkubernetesiolastappliedconfiguration
+              }
+            }
+          }
+          metadata {
+            resourceVersion
           }
         }
       }
